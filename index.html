@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Estado de los gastos comunes del Condominio Las Camelias.">
+<title>Gastos comunes - Condominio Las Camelias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F7F3;
+    --ink: #1B2A24;
+    --muted: #54655C;
+    --leaf: #2F6B4F;
+    --leaf-soft: #DCE9E1;
+    --camelia: #B8284F;
+    --camelia-soft: #F6DCE3;
+    --rule: #C3D0C7;
+    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --text: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111A16;
+      --ink: #E7EFEA;
+      --muted: #9DB0A5;
+      --leaf: #72C29B;
+      --leaf-soft: #1D3328;
+      --camelia: #F27C9A;
+      --camelia-soft: #3B2029;
+      --rule: #2C3D34;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 1.0625rem/1.6 var(--text);
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  .nums { font-variant-numeric: tabular-nums lining-nums; }
+
+  .brand { font: 700 1rem/1 var(--display); color: var(--leaf); margin: 0 0 1.25rem; letter-spacing: .01em; }
+  h1 {
+    font: 700 clamp(2.1rem, 7vw, 3.4rem)/1.04 var(--display);
+    letter-spacing: -0.025em;
+    margin: 0 0 .75rem;
+  }
+  .lead { color: var(--muted); margin: 0; max-width: 34rem; }
+
+  section { margin-top: 2.75rem; padding-top: 1.75rem; border-top: 1px solid var(--rule); }
+  h2 { font: 600 1.4rem/1.2 var(--display); letter-spacing: -0.01em; margin: 0 0 1rem; }
+  p { margin: 0 0 .75rem; max-width: 36rem; }
+  .muted { color: var(--muted); }
+
+  /* Cuadre del mes: libro de cuentas con puntos guía */
+  .ledger { list-style: none; margin: 0; padding: 0; }
+  .ledger li { display: flex; align-items: baseline; padding: .35rem 0; }
+  .ledger .lead-dots { flex: 1; border-bottom: 2px dotted var(--rule); margin: 0 .6rem; transform: translateY(-.25em); min-width: 1rem; }
+  .ledger .val { font-weight: 700; white-space: nowrap; }
+  .ledger .sign { color: var(--muted); font-weight: 400; margin-right: .25rem; }
+  .ledger li.total { margin-top: .6rem; padding-top: .8rem; border-top: 2px solid var(--ink); }
+  .ledger li.total .lbl { font: 700 1.2rem/1.2 var(--display); }
+  .ledger li.total .val { font: 700 1.9rem/1 var(--display); color: var(--leaf); }
+  .verified { margin-top: .75rem; color: var(--leaf); font-weight: 700; font-size: .95rem; }
+
+  /* Pendiente */
+  .owed { display: grid; gap: 1.25rem 2.5rem; grid-template-columns: 1fr; align-items: end; }
+  @media (min-width: 40rem) { .owed { grid-template-columns: auto 1fr; } }
+  .owed .big { font: 700 clamp(2.6rem, 9vw, 3.8rem)/1 var(--display); color: var(--camelia); letter-spacing: -0.02em; }
+  .owed .big small { display: block; font: 400 1rem/1.4 var(--text); color: var(--muted); letter-spacing: 0; margin-top: .35rem; }
+  .facts { list-style: none; margin: 0; padding: 0; }
+  .facts li { padding: .3rem 0 .3rem 1.1rem; position: relative; }
+  .facts li::before { content: ""; position: absolute; left: 0; top: .95em; width: .5rem; height: .5rem; border-radius: 50%; background: var(--camelia); }
+
+  /* Reserva */
+  .track { height: 1.1rem; background: var(--camelia-soft); border-radius: .55rem; overflow: hidden; margin: 1rem 0 .5rem; }
+  .fill { height: 100%; width: 0; background: var(--leaf); border-radius: .55rem 0 0 .55rem; transition: width .9s cubic-bezier(.2,.7,.2,1); }
+  .track-labels { display: flex; justify-content: space-between; gap: 1rem; font-size: .95rem; color: var(--muted); }
+  .track-labels strong { color: var(--ink); }
+
+  /* Gastos */
+  .rows { list-style: none; margin: 0; padding: 0; }
+  .rows li { display: grid; grid-template-columns: 1fr auto; gap: .2rem 1rem; padding: .55rem 0; border-bottom: 1px solid var(--rule); }
+  .rows li:last-child { border-bottom: 0; }
+  .rows .bar { grid-column: 1 / -1; height: .4rem; background: var(--leaf-soft); border-radius: .2rem; overflow: hidden; }
+  .rows .bar i { display: block; height: 100%; background: var(--leaf); }
+  .rows .amt { font-weight: 700; }
+  .rows li.sum { border-top: 2px solid var(--ink); border-bottom: 0; margin-top: .3rem; padding-top: .8rem; }
+  .rows li.sum .bar { display: none; }
+
+  /* Cuota */
+  .split { display: flex; height: 2.6rem; border-radius: .5rem; overflow: hidden; margin: 1rem 0 .6rem; }
+  .split div { display: flex; align-items: center; padding: 0 .75rem; font-weight: 700; font-size: .95rem; white-space: nowrap; overflow: hidden; }
+  .split .g { background: var(--camelia-soft); color: var(--ink); }
+  .split .r { background: var(--leaf); color: var(--bg); }
+
+  /* Gráfico */
+  .chart { width: 100%; height: auto; display: block; margin-top: .5rem; }
+  .chart .grid { stroke: var(--rule); stroke-width: 1; }
+  .chart .axis { fill: var(--muted); font: 400 14px var(--text); }
+  .chart .gap { fill: var(--camelia-soft); }
+  .chart .real { fill: none; stroke: var(--leaf); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+  .chart .exp { fill: none; stroke: var(--camelia); stroke-width: 2.5; stroke-dasharray: 7 6; stroke-linecap: round; }
+  .chart .tag-real { fill: var(--leaf); font: 700 15px var(--text); }
+  .chart .tag-exp { fill: var(--camelia); font: 700 15px var(--text); }
+  .chart .tag-gap { fill: var(--ink); font: 700 15px var(--text); }
+
+  .note { background: var(--leaf-soft); border-radius: .6rem; padding: 1.1rem 1.25rem; }
+  .note p:last-child { margin-bottom: 0; }
+  footer { margin-top: 2.5rem; color: var(--muted); font-size: .92rem; }
+  noscript { display: block; padding: 1rem; background: var(--camelia-soft); border-radius: .5rem; margin-top: 1.5rem; }
+
+  @media (prefers-reduced-motion: reduce) { .fill { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="brand">Condominio Las Camelias</p>
+    <h1 id="titulo">Gastos comunes</h1>
+    <p class="lead" id="bajada"></p>
+  </header>
+
+  <noscript>Esta página necesita JavaScript para mostrar las cifras del mes.</noscript>
+
+  <section aria-labelledby="h-cuadre">
+    <h2 id="h-cuadre">Cuadre del mes</h2>
+    <ul class="ledger nums" id="ledger"></ul>
+    <p class="verified" id="verified" hidden></p>
+  </section>
+
+  <section aria-labelledby="h-pend">
+    <h2 id="h-pend">Cuotas pendientes</h2>
+    <div class="owed">
+      <div class="big nums" id="owed-big"></div>
+      <ul class="facts" id="owed-facts"></ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-reserva">
+    <h2 id="h-reserva">Fondo de reserva</h2>
+    <p id="reserva-texto"></p>
+    <div class="track" role="img" id="reserva-track"><div class="fill" id="reserva-fill"></div></div>
+    <div class="track-labels nums" id="reserva-labels"></div>
+    <p class="muted" style="margin-top:.9rem" id="cobertura"></p>
+  </section>
+
+  <section aria-labelledby="h-gastos">
+    <h2 id="h-gastos">En qué se gastó</h2>
+    <ul class="rows nums" id="gastos"></ul>
+  </section>
+
+  <section aria-labelledby="h-cuota">
+    <h2 id="h-cuota">Cómo se reparte la cuota</h2>
+    <p id="cuota-texto"></p>
+    <div class="split nums" id="split"></div>
+  </section>
+
+  <section aria-labelledby="h-year">
+    <h2 id="h-year">Saldo durante el año</h2>
+    <p>La línea continua es el saldo real en la cuenta. La punteada es el saldo que habría si todas las cuotas estuvieran al día. La zona rosada es la diferencia.</p>
+    <svg class="chart" id="chart" viewBox="0 0 520 340" role="img" aria-labelledby="chart-t chart-d">
+      <title id="chart-t">Saldo real y saldo esperado durante 2026</title>
+      <desc id="chart-d"></desc>
+    </svg>
+  </section>
+
+  <section aria-labelledby="h-reg">
+    <div class="note">
+      <h2 id="h-reg">Regularizar pagos pendientes</h2>
+      <p>Si tu casa tiene cuotas atrasadas, te pedimos regularizarlas este mes. Si hay algún inconveniente, escribe a la administración por mensaje privado y acordamos un plan de pago en cuotas.</p>
+      <p>El detalle por casa se entrega de forma privada a cada vecino.</p>
+    </div>
+  </section>
+
+  <footer id="pie"></footer>
+</div>
+
+<script>
+/* ============================================================
+   DATOS DEL MES: para actualizar la página cada mes,
+   edita solo este bloque y vuelve a subir el archivo.
+   ============================================================ */
+const DATA = {
+  periodo: "Noviembre 2026",
+  cierre: "12 de noviembre de 2026",
+  actualizado: "13 de noviembre de 2026",
+
+  cuota: 80000,            // cuota mensual por casa
+  casas: 8,
+  casasQuePagaron: 4,      // casas que pagaron en el mes
+  casasAlDia: 6,           // casas sin cuotas pendientes
+  casasConAnioPagado: 2,   // casas que ya pagaron todo el año
+
+  saldoInicio: 937788,
+  ingresos: 320000,
+  gastos: [
+    ["Jardinero", 200000],
+    ["ENEL (luz)", 61706],
+    ["Aguas Andinas", 27290],
+    ["Comisión del banco", 16502]
+  ],
+  saldoBanco: 952290,      // saldo según la cartola, para verificar el cuadre
+
+  pendiente: 720000,
+  pendienteMesAnterior: 560000,
+  saldoMesAnterior: 937788,
+  cobrableAnio: 7020000,   // total de cuotas que correspondía cobrar en el año
+  gastoPromedioMensual: 402189,
+
+  meses: ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov"],
+  saldoReal:     [1284636,1219174,1911118,1605787,1036916,984545,1096384,774468,944520,937788,952290],
+  saldoEsperado: [1284636,1219174,1911118,1605787,1116916,1144545,1336384,1094468,1344520,1497788,1672290]
+};
+
+(function () {
+  const $ = id => document.getElementById(id);
+  const n = v => String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  const m = v => "$" + n(v);
+  const pct = v => Math.round(v * 100) + "%";
+  const dec = v => v.toFixed(1).replace(".", ",");
+
+  const totalGastos = DATA.gastos.reduce((s, g) => s + g[1], 0);
+  const saldo = DATA.saldoInicio + DATA.ingresos - totalGastos;
+  const esperado = saldo + DATA.pendiente;
+  const esperadoAnt = DATA.saldoMesAnterior + DATA.pendienteMesAnterior;
+  const pctReserva = saldo / esperado;
+  const pctReservaAnt = DATA.saldoMesAnterior / esperadoAnt;
+  const gastoPorCasa = totalGastos / DATA.casas;
+  const reservaPorCasa = DATA.cuota - gastoPorCasa;
+  const casasPend = DATA.casas - DATA.casasAlDia;
+
+  document.title = "Gastos comunes de " + DATA.periodo.toLowerCase() + " - Condominio Las Camelias";
+  $("titulo").textContent = "Gastos comunes de " + DATA.periodo.split(" ")[0].toLowerCase();
+  $("bajada").textContent = "Cierre al " + DATA.cierre + ". Las cifras corresponden a la cuenta del condominio.";
+
+  /* Cuadre */
+  $("ledger").innerHTML =
+    row("Saldo a inicio de mes", m(DATA.saldoInicio), "") +
+    row("Pagos recibidos en el mes (" + DATA.casasQuePagaron + " casas)", m(DATA.ingresos), "+") +
+    row("Gastos del mes", m(totalGastos), "−") +
+    '<li class="total"><span class="lbl">Saldo en cuenta</span><span class="lead-dots"></span><span class="val">' + m(saldo) + '</span></li>';
+  function row(l, v, s) {
+    return '<li><span>' + l + '</span><span class="lead-dots"></span><span class="val">' +
+      (s ? '<span class="sign">' + s + '</span>' : '') + v + '</span></li>';
+  }
+  if (saldo === DATA.saldoBanco) {
+    $("verified").hidden = false;
+    $("verified").textContent = "El saldo coincide con la cartola del banco.";
+  }
+
+  /* Pendiente */
+  $("owed-big").innerHTML = m(DATA.pendiente) + "<small>en cuotas pendientes de pago</small>";
+  $("owed-facts").innerHTML =
+    "<li>Equivale al " + pct(DATA.pendiente / DATA.cobrableAnio) + " de lo que correspondía cobrar en el año.</li>" +
+    "<li>El mes pasado eran " + m(DATA.pendienteMesAnterior) + ".</li>" +
+    "<li>" + DATA.casasAlDia + " de " + DATA.casas + " casas están al día" +
+      (DATA.casasConAnioPagado ? ", y " + DATA.casasConAnioPagado + " ya pagaron todo el año" : "") + ".</li>";
+
+  /* Reserva */
+  $("reserva-texto").textContent =
+    "El fondo de reserva es de " + m(saldo) + ". Si todas las cuotas estuvieran al día tendría " + m(esperado) +
+    ", así que hoy está al " + pct(pctReserva) + " de lo esperado. El mes pasado estaba al " + pct(pctReservaAnt) + ".";
+  $("reserva-track").setAttribute("aria-label", "Fondo de reserva al " + pct(pctReserva) + " de lo esperado");
+  $("reserva-labels").innerHTML = "<span><strong>" + m(saldo) + "</strong> hoy</span><span><strong>" + m(esperado) + "</strong> esperado</span>";
+  $("cobertura").textContent =
+    "Con el gasto habitual de unos " + m(DATA.gastoPromedioMensual) + " al mes, la reserva alcanza para " +
+    dec(saldo / DATA.gastoPromedioMensual) + " meses. Con los pendientes al día alcanzaría para " +
+    dec(esperado / DATA.gastoPromedioMensual) + " meses.";
+  requestAnimationFrame(() => requestAnimationFrame(() => { $("reserva-fill").style.width = (pctReserva * 100) + "%"; }));
+
+  /* Gastos */
+  $("gastos").innerHTML = DATA.gastos.map(g =>
+    '<li><span>' + g[0] + '</span><span class="amt">' + m(g[1]) + '</span>' +
+    '<span class="bar"><i style="width:' + (g[1] / totalGastos * 100).toFixed(1) + '%"></i></span></li>'
+  ).join("") +
+  '<li class="sum"><span>Total del mes</span><span class="amt">' + m(totalGastos) + '</span></li>';
+
+  /* Cuota */
+  $("cuota-texto").textContent =
+    "De la cuota de " + m(DATA.cuota) + " por casa, este mes " + m(gastoPorCasa) + " se fue en gastos y " +
+    m(reservaPorCasa) + " quedó para el fondo de reserva.";
+  $("split").innerHTML =
+    '<div class="g" style="width:' + (gastoPorCasa / DATA.cuota * 100).toFixed(1) + '%">Gastos ' + m(gastoPorCasa) + '</div>' +
+    '<div class="r" style="width:' + (reservaPorCasa / DATA.cuota * 100).toFixed(1) + '%">Reserva ' + m(reservaPorCasa) + '</div>';
+
+  /* Gráfico */
+  const W = 520, H = 340, L = 66, R = 16, T = 20, B = 40;
+  const pw = W - L - R, ph = H - T - B, max = 2000000;
+  const k = DATA.meses.length;
+  const x = i => L + pw * i / (k - 1);
+  const y = v => T + ph * (1 - v / max);
+  const pts = arr => arr.map((v, i) => x(i).toFixed(1) + "," + y(v).toFixed(1));
+  const last = k - 1;
+  let svg = "";
+  [[0, "0"], [500000, "$500 mil"], [1000000, "$1 M"], [1500000, "$1,5 M"], [2000000, "$2 M"]].forEach(t => {
+    svg += '<line class="grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t[0]) + '" y2="' + y(t[0]) + '"/>' +
+           '<text class="axis" x="' + (L - 8) + '" y="' + (y(t[0]) + 5) + '" text-anchor="end">' + t[1] + '</text>';
+  });
+  DATA.meses.forEach((mes, i) => {
+    if (i % 2 === 0 || i === last) {
+      svg += '<text class="axis" x="' + x(i) + '" y="' + (H - 12) + '" text-anchor="middle">' + mes + '</text>';
+    }
+  });
+  const area = "M" + pts(DATA.saldoEsperado).join(" L") + " L" + pts(DATA.saldoReal).reverse().join(" L") + " Z";
+  svg += '<path class="gap" d="' + area + '"/>';
+  svg += '<polyline class="exp" points="' + pts(DATA.saldoEsperado).join(" ") + '"/>';
+  svg += '<polyline class="real" points="' + pts(DATA.saldoReal).join(" ") + '"/>';
+  const yE = y(DATA.saldoEsperado[last]), yR = y(DATA.saldoReal[last]);
+  svg += '<text class="tag-exp" x="' + x(last) + '" y="' + (yE - 10) + '" text-anchor="end">Si todos pagaran</text>';
+  svg += '<text class="tag-real" x="' + x(last) + '" y="' + (yR + 24) + '" text-anchor="end">Saldo real</text>';
+  svg += '<text class="tag-gap" x="' + (x(last) - 12) + '" y="' + ((yE + yR) / 2 + 5) + '" text-anchor="end">Faltan ' + m(DATA.saldoEsperado[last] - DATA.saldoReal[last]) + '</text>';
+  $("chart").insertAdjacentHTML("beforeend", svg);
+  $("chart-d").textContent =
+    "En " + DATA.meses[last] + " el saldo real es " + m(DATA.saldoReal[last]) + " y el esperado, con todas las cuotas al día, es " +
+    m(DATA.saldoEsperado[last]) + ". La diferencia viene creciendo desde mayo.";
+
+  $("pie").textContent = "Última actualización: " + DATA.actualizado + ".";
+})();
+</script>
+</body>
+</html>
